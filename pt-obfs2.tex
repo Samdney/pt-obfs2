@@ -104,19 +104,19 @@ STATUS: Draft
 % ================================================================================
 \begin{comment}
 TODO: Roadmap
-=> Introduction (only a few lines)
-=> Spec
-=> Thread model
-=> obfsproxy
-=> "protocol" diagram
-=> Sample/Wireshark stuff
-=> "Fun Time"
-=> "Play Time"
-=> Strengths and weaknesses
-=> Prospect
-=> Conclusion
-=> Appendix
-=> What else? ...
+=> +: Introduction (only a few lines)
+=> -: Spec
+=> -: Thread model
+=> -: obfsproxy
+=> -: "protocol" diagram
+=> -: Sample/Wireshark stuff
+=> -: "Fun Time"
+=> -: "Play Time"
+=> -: Strengths and weaknesses
+=> -: Prospect
+=> -: Conclusion
+=> -: Appendix
+=> -: What else? ...
 \end{comment}
 % ================================================================================
 \section*{Preamble}
@@ -148,10 +148,14 @@ TODO
 % --------------------------------------------------------------------------------
 \textit{Obfs2} is a protocol obfuscation layer for TCP protocols, to keep a third party from telling what protocol is in use based on message contents \cite{TorGitWebObfs2Specification}. It's the continuation of brl's ssh obfuscation protocol \cite{TorGitWebObfs2Specification} \cite{GitHubBrlObfuscatedOpenssh}.
 % ---------------------------------------
-%\subsection{XXX}
-%\label{ss:XXX}
+\subsection{Overview}
+\label{ss:overview}
 % ---------------------------------------
-% TODO
+The protocol consists of two phases.
+\begin{itemize}
+    \item First: The parties establish keys
+    \item Second: The parties exchange superenciphered traffic.
+\end{itemize}
 % ================================================================================
 \section{Conclusions}
 \label{s:conclusions}
