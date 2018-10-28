@@ -206,7 +206,7 @@ Given are the constants \lstinline[language=C]{MAGIC_VALUE}, \lstinline[language
 \subsubsection{Generating initial values}
 \label{sss:generatinginitialvalues}
 % ---------------------------------------
-The 'initiator' generate a seed, a padding key and a random PADLEN in range from 0 through \lstinline[language=C]{MAX_PADDING} (inclusive).
+The 'initiator' (see listing \ref{lst:INIT_seedandpaddingkey}) generate a seed, a padding key and a random PADLEN in range from 0 through \lstinline[language=C]{MAX_PADDING} (inclusive).
 
 \begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=Generate INIT seed and padding key \cite{TorGitWebObfs2Specification}., label=lst:INIT_seedandpaddingkey]
     INIT_SEED = SR(SEED_LENGTH)
@@ -214,12 +214,28 @@ The 'initiator' generate a seed, a padding key and a random PADLEN in range from
     PADLEN = R([0:MAX_PADDING])
 \end{lstlisting}
 
-The 'responder' do it in the same way.
+The 'responder' (see listing \ref{lst:RESP_seedandpaddingkey}) do it in the same way.
 \begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=Generate RESP seed and padding key \cite{TorGitWebObfs2Specification}., label=lst:RESP_seedandpaddingkey]
     RESP_SEED = SR(SEED_LENGTH)
     RESP_PAD_KEY = MAC("Responder obfuscation padding", RESP_SEED)[:KEYLEN]
     PADLEN = R([0:MAX_PADDING])
 \end{lstlisting}
+% ---------------------------------------
+\subsubsection{Init messages}
+\label{sss:initmessages}
+% ---------------------------------------
+After generating the initial values \cite{TorGitWebObfs2Specification}, the initiator (see listing \ref{lst:INIT_initmessage}) sends
+\begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=INIT's init message \cite{TorGitWebObfs2Specification}., label=lst:INIT_initmessage]
+    INIT_SEED | Enc(INIT_PAD_KEY, UINT32(MAGIC_VALUE) | UINT32(PADLEN) | WR(PADLEN))
+\end{lstlisting}
+encrypted by the key information given by the \lstinline[language=C]{SEED}, to the responder (see listing \ref{lst:RESP_initmessage}), which do it likewise.
+\begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=RESP's init message \cite{TorGitWebObfs2Specification}., label=lst:RESP_initmessage]
+    RESP_SEED | Enc(RESP_PAD_KEY, UINT32(MAGIC_VALUE) | UINT32(PADLEN) | WR(PADLEN))
+\end{lstlisting}
+
+After receiving the SEED from the other party, each party decrypts the other party's padding key value and the next 8 bytes.
+
+It checks the \lstinline[language=C]{MAGIC_VALUE} and the \lstinline[language=C]{PADLEN} value for conclusiveness and close the connection immediately in case of invalidity, otherwise, it read the remaining \lstinline[language=C]{PADLEN} bytes of padding data and discard them.
 % ================================================================================
 \section{Conclusions}
 \label{s:conclusions}
