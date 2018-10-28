@@ -202,6 +202,24 @@ according to \cite{TorGitWebObfs2Specification}. A "byte" is an 8-bit octet and 
 \label{sss:thegivenvalues}
 % ---------------------------------------
 Given are the constants \lstinline[language=C]{MAGIC_VALUE}, \lstinline[language=C]{SEED_LENGTH}, \lstinline[language=C]{MAX_PADDING} and \lstinline[language=C]{HASH_ITERATIONS} and the lengths \lstinline[language=C]{KEYLEN}, \lstinline[language=C]{IVLEN} and \lstinline[language=C]{HASHLEN}.
+% ---------------------------------------
+\subsubsection{Generating initial values}
+\label{sss:generatinginitialvalues}
+% ---------------------------------------
+The 'initiator' generate a seed, a padding key and a random PADLEN in range from 0 through \lstinline[language=C]{MAX_PADDING} (inclusive).
+
+\begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=Generate INIT seed and padding key \cite{TorGitWebObfs2Specification}., label=lst:INIT_seedandpaddingkey]
+    INIT_SEED = SR(SEED_LENGTH)
+    INIT_PAD_KEY = MAC("Initiator obfuscation padding", INIT_SEED)[:KEYLEN]
+    PADLEN = R([0:MAX_PADDING])
+\end{lstlisting}
+
+The 'responder' do it in the same way.
+\begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=Generate RESP seed and padding key \cite{TorGitWebObfs2Specification}., label=lst:RESP_seedandpaddingkey]
+    RESP_SEED = SR(SEED_LENGTH)
+    RESP_PAD_KEY = MAC("Responder obfuscation padding", RESP_SEED)[:KEYLEN]
+    PADLEN = R([0:MAX_PADDING])
+\end{lstlisting}
 % ================================================================================
 \section{Conclusions}
 \label{s:conclusions}
