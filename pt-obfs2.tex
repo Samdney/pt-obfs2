@@ -185,13 +185,23 @@ and constants
 
 as well as
 \begin{itemize}
-    \item \lstinline[language=C]{KEYLEN} (16) is the length of the key used by \enc(K,s)
-    \item \lstinline[language=C]{IVLEN} (16) is the length of the IV used by \enc(K,s)
-    \item \lstinline[language=C]{HASHLEN} (32) is the length of the output of \hash()
+    \item \lstinline[language=C]{KEYLEN = 16} is the length of the key used by \enc(K,s)
+    \item \lstinline[language=C]{IVLEN = 16} is the length of the IV used by \enc(K,s)
+    \item \lstinline[language=C]{HASHLEN = 32} is the length of the output of \hash()
     \item \mac(s, x) = \hash(s | x | s)
 \end{itemize}
 
 according to \cite{TorGitWebObfs2Specification}. A "byte" is an 8-bit octet and we require that HASHLEN >= KEYLEN + IVLEN.
+% ---------------------------------------
+\subsection{The key establishment phase}
+\label{ss:theKeyestablishmentphase}
+% ---------------------------------------
+\textit{The key establishment phase} consists of several substeps.
+% ---------------------------------------
+\subsubsection{The given values}
+\label{sss:thegivenvalues}
+% ---------------------------------------
+Given are the constants \lstinline[language=C]{MAGIC_VALUE}, \lstinline[language=C]{SEED_LENGTH}, \lstinline[language=C]{MAX_PADDING} and \lstinline[language=C]{HASH_ITERATIONS} and the lengths \lstinline[language=C]{KEYLEN}, \lstinline[language=C]{IVLEN} and \lstinline[language=C]{HASHLEN}.
 % ================================================================================
 \section{Conclusions}
 \label{s:conclusions}
