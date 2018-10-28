@@ -136,16 +136,11 @@ In this paper, we will talk about \textit{obfs2}, a protocol obfuscation layer f
 % ---------------------------------------
 % TODO
 TODO
-% ---------------------------------------
-\subsection{Notation}
-\label{ss:notation}
-% ---------------------------------------
-% TODO
-TODO
 % ================================================================================
 \section{Obfs2}
 \label{s:obfs2}
 % --------------------------------------------------------------------------------
+% TODO: AUTHORS!!!, HISTORY!!!
 \textit{Obfs2} is a protocol obfuscation layer for TCP protocols, to keep a third party from telling what protocol is in use based on message contents \cite{TorGitWebObfs2Specification}. It's the continuation of brl's ssh obfuscation protocol \cite{TorGitWebObfs2Specification} \cite{GitHubBrlObfuscatedOpenssh}.
 % ---------------------------------------
 \subsection{Overview}
@@ -156,6 +151,46 @@ The protocol consists of two phases.
     \item First: The parties establish keys
     \item Second: The parties exchange superenciphered traffic.
 \end{itemize}
+% ---------------------------------------
+\subsection{Notation}
+\label{ss:notation}
+% ---------------------------------------
+Given are two parties: the 'initiator' (\lstinline[language=C]{INIT}), which opens the connection and can mostly be associated with a client, and the 'responder' (\lstinline[language=C]{RESP}), which accepts the connection and can mostly be associated with a server.
+
+We use the following primitives,
+\begin{itemize}
+    \item $\mathrm{H\left(x\right)}$ is SHA256 of x
+    \item $\mathrm{H^{n}\left(x\right)}$ is $\mathrm{H\left(x\right)}$ called iteratively n times
+    \item E(K,s) is the AES-CTR-128 encryption of s using K as key
+\end{itemize}
+
+notation
+\begin{itemize}
+    \item x | y is the concatenation of x and y
+    \item UINT32(n) is the 4 byte value of n in big-endian (network) order
+    \item SR(n) is n bytes of strong random data
+    \item WR(n) is n bytes of weaker random data
+    \item "xyz" is the ASCII characters 'x', 'y', and 'z', not NUL-terminated
+    \item s[:n] is the first n bytes of s
+    \item s[n:] is the last n bytes of s
+\end{itemize}
+
+and constants
+\begin{itemize}
+    \item \lstinline[language=C]{MAGIC_VALUE = 0x2BF5CA7E}
+    \item \lstinline[language=C]{SEED_LENGTH = 16}
+    \item \lstinline[language=C]{MAX_PADDING = 8192}
+    \item \lstinline[language=C]{HASH_ITERATIONS = 100000}
+\end{itemize}
+
+\begin{itemize}
+    \item KEYLEN (16) is the length of the key used by E(K,s)
+    \item IVLEN (16) is the length of the IV used by E(K,s)
+    \item HASHLEN (32) is the length of the output of H()
+    \item MAC(s, x) = H(s | x | s)
+\end{itemize}
+
+according to \cite{TorGitWebObfs2Specification}. A "byte" is an 8-bit octet and we require that HASHLEN >= KEYLEN + IVLEN.
 % ================================================================================
 \section{Conclusions}
 \label{s:conclusions}
