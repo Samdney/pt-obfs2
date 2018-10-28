@@ -159,20 +159,20 @@ Given are two parties: the 'initiator' (\lstinline[language=C]{INIT}), which ope
 
 We use the following primitives,
 \begin{itemize}
-    \item $\mathrm{H\left(x\right)}$ is SHA256 of x
-    \item $\mathrm{H^{n}\left(x\right)}$ is $\mathrm{H\left(x\right)}$ called iteratively n times
-    \item E(K,s) is the AES-CTR-128 encryption of s using K as key
+    \item \hash(x) is SHA256 of x
+    \item $\mathrm{\hash^{n}}$(x) is \hash(x) called iteratively n times
+    \item \enc(K,s) is the AES-CTR-128 encryption of s using K as key
 \end{itemize}
 
 notation
 \begin{itemize}
-    \item x | y is the concatenation of x and y
-    \item UINT32(n) is the 4 byte value of n in big-endian (network) order
-    \item SR(n) is n bytes of strong random data
-    \item WR(n) is n bytes of weaker random data
-    \item "xyz" is the ASCII characters 'x', 'y', and 'z', not NUL-terminated
-    \item s[:n] is the first n bytes of s
-    \item s[n:] is the last n bytes of s
+    \item \lstinline[language=C]{x | y} is the concatenation of x and y
+    \item \lstinline[language=C]{UINT32(n)} is the 4 byte value of n in big-endian (network) order
+    \item \lstinline[language=C]{SR(n)} is n bytes of strong random data
+    \item \lstinline[language=C]{WR(n)} is n bytes of weaker random data
+    \item \lstinline[language=C]{"xyz"} is the ASCII characters 'x', 'y', and 'z', not NUL-terminated
+    \item \lstinline[language=C]{s[:n]} is the first n bytes of s
+    \item \lstinline[language=C]{s[n:]} is the last n bytes of s
 \end{itemize}
 
 and constants
@@ -183,11 +183,12 @@ and constants
     \item \lstinline[language=C]{HASH_ITERATIONS = 100000}
 \end{itemize}
 
+as well as
 \begin{itemize}
-    \item KEYLEN (16) is the length of the key used by E(K,s)
-    \item IVLEN (16) is the length of the IV used by E(K,s)
-    \item HASHLEN (32) is the length of the output of H()
-    \item MAC(s, x) = H(s | x | s)
+    \item \lstinline[language=C]{KEYLEN} (16) is the length of the key used by \enc(K,s)
+    \item \lstinline[language=C]{IVLEN} (16) is the length of the IV used by \enc(K,s)
+    \item \lstinline[language=C]{HASHLEN} (32) is the length of the output of \hash()
+    \item \mac(s, x) = \hash(s | x | s)
 \end{itemize}
 
 according to \cite{TorGitWebObfs2Specification}. A "byte" is an 8-bit octet and we require that HASHLEN >= KEYLEN + IVLEN.
