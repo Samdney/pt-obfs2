@@ -41,7 +41,7 @@
 \title{Obfs2}	% TODO
 % ================================================================================
 %\titlenote{Produces the permission block, and copyright information}
-\subtitle{Pluggable Transports documentation series.}	% TODO
+\subtitle{Pluggable Transport documentation series.}	% TODO
 \subtitlenote{The author believes in the importance of the independence of research and is funded by the public community. If you also believe in this values, you can find ways for supporting the author's work here: \url{https://research.carolin-zoebelein.de/crowdfunding.html}}
 % ================================================================================
 \author{Carolin Z\"obelein}
@@ -236,6 +236,24 @@ encrypted by the key information given by the \lstinline[language=C]{SEED}, to t
 After receiving the SEED from the other party, each party decrypts the other party's padding key value and the next 8 bytes.
 
 It checks the \lstinline[language=C]{MAGIC_VALUE} and the \lstinline[language=C]{PADLEN} value for conclusiveness and close the connection immediately in case of invalidity, otherwise, it read the remaining \lstinline[language=C]{PADLEN} bytes of padding data and discard them.
+% ---------------------------------------
+\subsubsection{Final key initialisations}
+\label{sss:finalkeyinitialisation}
+% ---------------------------------------
+If the messages above are valid, the parties derive additional keys (see listing \ref{lst:finalkeyinitialisations}).
+
+\begin{lstlisting}[language=C,  tabsize=4, numbers=left, xleftmargin=5.0ex, basicstyle=\footnotesize, breakatwhitespace=false, breaklines=true, frame=tb, caption=Final key initialisations \cite{TorGitWebObfs2Specification}., label=lst:finalkeyinitialisations]
+    INIT_SECRET = MAC("Initiator obfuscated data", INIT_SEED|RESP_SEED)
+    RESP_SECRET = MAC("Responder obfuscated data", INIT_SEED|RESP_SEED)
+
+    INIT_KEY = INIT_SECRET[:KEYLEN]
+    INIT_IV = INIT_SECRET[KEYLEN:]
+
+    RESP_KEY = RESP_SECRET[:KEYLEN]
+    RESP_IV = RESP_SECRET[KEYLEN:]
+\end{lstlisting}
+
+The \lstinline[language=C]{INIT_KEY} value keys a stream cipher used to encrypt values from initiator to responder and the stream cipher's IV is \lstinline[language=C]{INIT_IV}. The responder do it in the same way for it's values.
 % ================================================================================
 \section{Conclusions}
 \label{s:conclusions}
